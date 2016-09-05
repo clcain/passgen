@@ -20,7 +20,11 @@ class Char():
         Char.left = random.random() > .5
 
     def get_next(self):
-        """Get the next manifestation of this type of password item."""
+        """Get the next manifestation of this type of password item.
+
+        Returns:
+            The next manifestation of this type of password item.
+        """
 
         next_char = None
         complete = False

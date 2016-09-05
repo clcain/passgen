@@ -7,7 +7,14 @@ from password_char import Num
 from password_char import Special
 
 def generate_password(config):
-    """Generate a password using the specified config."""
+    """Generate a password using the specified config.
+
+    Args:
+        config: The configuration object specifying the parameters
+                for this password.
+    Returns:
+        A complete password in string format.
+    """
 
     Char.set_config(config)
 
