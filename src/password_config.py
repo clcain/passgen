@@ -4,7 +4,7 @@ import sys
 class PasswordConfig():
     """The configuration for a password."""
 
-    def __init__(self, upper_count=4, lower_count=8, num_count=4, special_count=0, toggle_hand=True, allow_doubles=False):
+    def __init__(self, upper_count=2, lower_count=4, num_count=2, special_count=0, toggle_hand=True, allow_doubles=False):
         self.upper_count = upper_count
         self.lower_count = lower_count
         self.num_count = num_count
