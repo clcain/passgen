@@ -1,4 +1,4 @@
-import random
+from random import SystemRandom
 
 class Char():
     """The base class for an object representation of the different types of
@@ -14,10 +14,11 @@ class Char():
             config: The password configuration object.
         """
 
+        Char.random = SystemRandom()
         Char.toggle_hand = config.toggle_hand
         Char.allow_doubles = config.allow_doubles
         Char.previous_char = None
-        Char.left = random.random() > .5
+        Char.left = Char.random.random() > .5
 
     def get_next(self):
         """Get the next manifestation of this type of password item.
@@ -36,7 +37,7 @@ class Char():
                 else:
                     next_char = self._get_right()
             else:
-                if random.random() > .5:
+                if Char.random.random() > .5:
                     next_char = self._get_left()
                 else:
                     next_char = self._get_right()
@@ -48,10 +49,10 @@ class Char():
         return next_char
 
     def _get_left(self):
-        return random.choice(self.left_list)
+        return Char.random.choice(self.left_list)
 
     def _get_right(self):
-        return random.choice(self.right_list)
+        return Char.random.choice(self.right_list)
 
     def __str__(self):
         return self.get_next()

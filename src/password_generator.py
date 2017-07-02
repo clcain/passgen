@@ -1,4 +1,4 @@
-import random
+from random import SystemRandom
 
 from password_char import Char
 from password_char import Upper
@@ -27,7 +27,7 @@ def generate_password(config):
         password_types.append(Num())
     for i in range(0, config.special_count):
         password_types.append(Special())
-    random.shuffle(password_types)
+    SystemRandom().shuffle(password_types)
 
     password = []
     for i in password_types:
