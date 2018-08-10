@@ -33,4 +33,15 @@ def generate_password(config):
     for i in password_types:
         password.append(str(i))
 
+    if config.human:
+        alpha_g = [x for x in password if x.isalpha()]
+        num_g = [x for x in password if x.isdigit()]
+        password = []
+        for i in range(0, config.alpha_length / 2):
+            password.append(alpha_g[i])
+        for x in num_g:
+            password.append(x)
+        for i in range(config.alpha_length / 2, config.alpha_length):
+            password.append(alpha_g[i])
+
     return ''.join(password)

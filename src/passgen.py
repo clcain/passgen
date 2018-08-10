@@ -16,6 +16,7 @@ def main():
             config.special_count = 0
             config.toggle_hand = True
             config.allow_doubles = False
+            config.human = False
 
         elif sys.argv[1] == 'medium':
             config.upper_count = 4
@@ -24,6 +25,7 @@ def main():
             config.special_count = 0
             config.toggle_hand = True
             config.allow_doubles = False
+            config.human = False
 
         elif sys.argv[1] == 'hard':
             config.upper_count = 8
@@ -32,6 +34,7 @@ def main():
             config.special_count = 4
             config.toggle_hand = False
             config.allow_doubles = True
+            config.human = False
 
         elif sys.argv[1] == 'insane':
             config.upper_count = 16
@@ -40,6 +43,16 @@ def main():
             config.special_count = 8
             config.toggle_hand = False
             config.allow_doubles = True
+            config.human = False
+
+        elif sys.argv[1] == 'human':
+            config.upper_count = 0
+            config.lower_count = 6
+            config.num_count = 3
+            config.special_count = 0
+            config.toggle_hand = True
+            config.allow_doubles = False
+            config.human = True
 
         else:
             config.upper_count = int(sys.argv[1])
@@ -48,6 +61,7 @@ def main():
             config.special_count = int(sys.argv[4])
             config.toggle_hand = bool(int(sys.argv[5]))
             config.allow_doubles = bool(int(sys.argv[6]))
+            config.human = bool(int(sys.argv[7]))
 
     except IndexError, ValueError:
         pass
