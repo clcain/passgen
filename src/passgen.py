@@ -30,16 +30,16 @@ def main():
             config.lower_count = 12
             config.num_count = 8
             config.special_count = 4
-            config.toggle_hand = True
-            config.allow_doubles = False
+            config.toggle_hand = False
+            config.allow_doubles = True
 
         elif sys.argv[1] == 'insane':
             config.upper_count = 16
             config.lower_count = 24
             config.num_count = 16
             config.special_count = 8
-            config.toggle_hand = True
-            config.allow_doubles = False
+            config.toggle_hand = False
+            config.allow_doubles = True
 
         else:
             config.upper_count = int(sys.argv[1])
