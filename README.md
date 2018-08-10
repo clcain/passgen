@@ -3,7 +3,7 @@
 ## Installation
 ```
 git clone git@github.com:clcain/passgen.git
-ln -s $PWD/passgen/src/passgen.py /usr/local/bin/passgen && chmod +x /usr/local/bin/passgen
+sudo ln -s $PWD/passgen/src/passgen.py /usr/local/bin/passgen && chmod +x /usr/local/bin/passgen
 ```
 
 ## Usage
