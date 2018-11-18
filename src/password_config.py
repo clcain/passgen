@@ -6,19 +6,26 @@ class PasswordConfig():
 
     def __init__(self, difficulty=None, upper_count=None, lower_count=None, num_count=None,
                  special_count=None, toggle_hand=None, allow_doubles=None):
-        self.upper_count = 4
-        self.lower_count = 8
-        self.num_count = 4
-        self.special_count = 0
-        self.toggle_hand = False
-        self.allow_doubles = False
-
-        if difficulty == 'easy':
+        if difficulty == None:
+            self.upper_count = 0
+            self.lower_count = 0
+            self.num_count = 0
+            self.special_count = 0
+            self.toggle_hand = False
+            self.allow_doubles = False
+        elif difficulty == 'easy':
             self.upper_count = 2
             self.lower_count = 4
             self.num_count = 2
             self.special_count = 0
             self.toggle_hand = True
+            self.allow_doubles = False
+        elif difficulty == 'medium':
+            self.upper_count = 4
+            self.lower_count = 8
+            self.num_count = 4
+            self.special_count = 0
+            self.toggle_hand = False
             self.allow_doubles = False
         elif difficulty == 'hard':
             self.upper_count = 8
