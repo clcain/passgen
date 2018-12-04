@@ -8,6 +8,8 @@ sudo ln -s $PWD/src/passgen.py /usr/local/bin/passgen && chmod +x /usr/local/bin
 
 ## Usage
 ```
-passgen <upper_count> <lower_count> <num_count> <special_count> <toggle_hand> <allow_doubles>
+passgen [-h] [--upper UPPER] [--lower LOWER] [--num NUM]
+        [--special SPECIAL] [--toggle] [--duplicates]
+        [difficulty]
 ```
-Defaults to `passgen 2 4 2 0 1 0`
+Defaults to `passgen medium`.
