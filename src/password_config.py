@@ -41,6 +41,9 @@ class PasswordConfig():
             self.special_count = 8
             self.toggle_hand = False
             self.allow_doubles = True
+        elif difficulty != None:
+            print('Unsable to parse difficulty.')
+            sys.exit(1)
 
         if type(upper_count) == int:
             self.upper_count = upper_count
