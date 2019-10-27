@@ -1,1 +1,1 @@
-rm -f ~/bin/passgen
+rm -f ~/.local/bin/passgen
