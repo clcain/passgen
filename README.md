@@ -1,6 +1,6 @@
 # passgen
 
-A command line secure password generator with cusomizable options.
+A command line secure password generator with customizable options.
 
 ## Installation
 
