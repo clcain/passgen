@@ -1,8 +1,10 @@
 # passgen
 
+A command line secure password generator with cusomizable options.
+
 ## Installation
 
-Run the installation script to create symlink.
+Run the installation script to create a symlink.
 ```
 bash install.sh
 ```
