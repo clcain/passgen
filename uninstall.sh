@@ -1,3 +1,6 @@
 #!/bin/bash
 
-rm -f ~/.local/bin/passgen
+for i in $(ls $PWD/bin/)
+do
+    rm -f ~/.local/bin/$i
+done
