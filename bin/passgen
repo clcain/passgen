@@ -2,16 +2,22 @@
 
 import argparse
 import sys
-
 from random import SystemRandom
 
-allowed_difficulties = ['easy', 'medium', 'hard', 'insane']
+ALLOWED_DIFFICULTIES = [
+    'easy',
+    'medium',
+    'hard'
+]
 
-class PasswordConfig():
+config = None
+
+
+class Config():
     """The configuration for a password."""
 
     def __init__(self, difficulty=None, upper_count=None, lower_count=None, num_count=None,
-                 special_count=None, toggle_hand=None, allow_doubles=None):
+                 special_count=None, toggle_hand=None, allow_doubles=None, allow_zeroes=None):
         if difficulty == None:
             self.upper_count = 0
             self.lower_count = 0
@@ -19,6 +25,7 @@ class PasswordConfig():
             self.special_count = 0
             self.toggle_hand = False
             self.allow_doubles = False
+            self.allow_zeroes = True
         elif difficulty == 'easy':
             self.upper_count = 2
             self.lower_count = 4
@@ -26,6 +33,7 @@ class PasswordConfig():
             self.special_count = 0
             self.toggle_hand = True
             self.allow_doubles = False
+            self.allow_zeroes = True
         elif difficulty == 'medium':
             self.upper_count = 4
             self.lower_count = 8
@@ -33,6 +41,7 @@ class PasswordConfig():
             self.special_count = 0
             self.toggle_hand = False
             self.allow_doubles = False
+            self.allow_zeroes = True
         elif difficulty == 'hard':
             self.upper_count = 8
             self.lower_count = 12
@@ -40,15 +49,9 @@ class PasswordConfig():
             self.special_count = 4
             self.toggle_hand = False
             self.allow_doubles = False
-        elif difficulty == 'insane':
-            self.upper_count = 16
-            self.lower_count = 24
-            self.num_count = 16
-            self.special_count = 8
-            self.toggle_hand = False
-            self.allow_doubles = True
+            self.allow_zeroes = True
         elif difficulty != None:
-            print('Unsable to parse difficulty.')
+            print(f'Unable to parse difficulty. Allowed difficulties: {ALLOWED_DIFFICULTIES}')
             sys.exit(1)
 
         if type(upper_count) == int:
@@ -63,6 +66,8 @@ class PasswordConfig():
             self.toggle_hand = toggle_hand
         if type(allow_doubles) == bool:
             self.allow_doubles = allow_doubles
+        if type(allow_zeroes) == bool:
+            self.allow_zeroes = allow_zeroes
 
     def __str__(self):
         return ('upper_count={} '
@@ -70,33 +75,24 @@ class PasswordConfig():
                 'num_count={} '
                 'special_count={} '
                 'toggle_hand={} '
-                'allow_doubles={}'.format(
+                'allow_doubles={} '
+                'allow_zeroes={}'.format(
                     self.upper_count,
                     self.lower_count,
                     self.num_count,
                     self.special_count,
                     self.toggle_hand,
-                    self.allow_doubles))
+                    self.allow_doubles,
+                    self.allow_zeroes))
+
 
 class Char():
     """The base class for an object representation of the different types of
        items that may be combined to form a password."""
 
-    @staticmethod
-    def set_config(config):
-        """Set the config of the Char class so that when str() is called
-           on an instance of this object, the output will adhere to the
-           specified parameters.
-
-        Args:
-            config: The password configuration object.
-        """
-
-        Char.random = SystemRandom()
-        Char.toggle_hand = config.toggle_hand
-        Char.allow_doubles = config.allow_doubles
-        Char.previous_char = None
-        Char.left = Char.random.random() > .5
+    random = SystemRandom()
+    previous_char = None
+    left = random.random() > .5
 
     def get_next(self):
         """Get the next manifestation of this type of password item.
@@ -106,10 +102,9 @@ class Char():
         """
 
         next_char = None
-        complete = False
 
-        while not complete:
-            if Char.toggle_hand:
+        while True:
+            if config.toggle_hand:
                 if Char.left:
                     next_char = self._get_left()
                 else:
@@ -119,11 +114,14 @@ class Char():
                     next_char = self._get_left()
                 else:
                     next_char = self._get_right()
-            if Char.allow_doubles or next_char is not Char.previous_char:
-                complete = True
+            if next_char == '0' and not config.allow_zeroes:
+                continue
+            if next_char is not Char.previous_char or config.allow_doubles:
+                break
 
         Char.previous_char = next_char
         Char.left = not Char.left
+
         return next_char
 
     def _get_left(self):
@@ -134,6 +132,7 @@ class Char():
 
     def __str__(self):
         return self.get_next()
+
 
 class Upper(Char):
     """The upper case letter type."""
@@ -150,12 +149,14 @@ class Lower(Char):
         self.left_list = ['q', 'w', 'e', 'r', 't', 'a', 's', 'd', 'f', 'g', 'z', 'x', 'c', 'v']
         self.right_list = ['y', 'u', 'i', 'o', 'p', 'h', 'j', 'k', 'l', 'b', 'n', 'm']
 
+
 class Num(Char):
     """The number type."""
 
     def __init__(self):
         self.left_list = ['1', '2', '3', '4', '5']
         self.right_list = ['6', '7', '8', '9', '0']
+
 
 class Special(Char):
     """The special character type."""
@@ -164,17 +165,13 @@ class Special(Char):
         self.left_list = ['!', '@', '#', '$', '%']
         self.right_list = ['^', '&', '*', '(', ')']
 
-def generate_password(config):
+
+def generate_password():
     """Generate a password using the specified config.
 
-    Args:
-        config: The configuration object specifying the parameters
-                for this password.
     Returns:
         A complete password in string format.
     """
-
-    Char.set_config(config)
 
     password_types = []
     for i in range(0, config.upper_count):
@@ -193,6 +190,7 @@ def generate_password(config):
 
     return ''.join(password)
 
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('difficulty', nargs='?', default=None)
@@ -202,22 +200,29 @@ def parse_args():
     parser.add_argument('--special', type=int, default=None)
     parser.add_argument('--toggle', action='store_true')
     parser.add_argument('--duplicates', action='store_true')
+    parser.add_argument('--no-zeroes', action='store_true')
     return parser.parse_args()
+
 
 def main():
     args = parse_args()
+
     if args.difficulty == None and len(sys.argv) == 1:
         args.difficulty = 'medium'
-    config = PasswordConfig(difficulty=args.difficulty,
-                            upper_count=args.upper,
-                            lower_count=args.lower,
-                            num_count=args.num,
-                            special_count=args.special,
-                            toggle_hand=args.toggle,
-                            allow_doubles=args.duplicates)
+
+    global config
+    config = Config(difficulty=args.difficulty,
+                    upper_count=args.upper,
+                    lower_count=args.lower,
+                    num_count=args.num,
+                    special_count=args.special,
+                    toggle_hand=args.toggle,
+                    allow_doubles=args.duplicates,
+                    allow_zeroes=not args.no_zeroes)
+
     sys.stderr.write('{}\n'.format(config))
-    password = generate_password(config)
-    print(password)
+    print(generate_password())
+
 
 if __name__ == '__main__':
     main()
